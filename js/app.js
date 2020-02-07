@@ -144,10 +144,14 @@ function createBoard() {
 
 
 createBoard();
+// appendChildren(gameBoard, playerNodes)
+appendChildren(cpuBoard, cpuNodes)
+
+// playerSwap();
+// playerSwap();
 
 // playerSwap(appendChildren(gameBoard, playerNodes))
 // playerSwap();
 // console.log('hello2')
-
 
 

@@ -5,15 +5,27 @@ body {
   ".player-info" ".board"; */
 }
 
+.ships {
+  border: dotted green;
+  margin-top: 4rem;
+
+}
+
+.ship-button {
+  /* display: flex; */
+  align-content: center;
+  justify-content: center;
+  margin-left: 8rem;
+}
 
 .board {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   margin-left: 20rem;
-  height: 10rem;
-  width: 10rem;
-  align-items: center;
+  width: 40%;
+  height: 40%;
+  position: relative;
 }
   .cpu {
     display: grid;
@@ -21,6 +33,9 @@ body {
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     width: 40%;
     height: 40%;
+    margin-left: .05rem;
+    margin-right: 10rem;
+    position: absolute;
     /* opacity: 0%; */
   }
 
@@ -29,6 +44,6 @@ body {
   border-radius: 50%;
   margin-top: 1.5rem;
   margin-left: 1.5rem;
-  width: 40%;
+  width: 50%;
   background-color: blue;
   }

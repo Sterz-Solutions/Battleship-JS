@@ -1,27 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <script defer src='js/app.js'></script>
-  <link rel="stylesheet" href="css/main.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script defer src="js/app.js"></script>
+    <link rel="stylesheet" href="css/main.css" />
 
-  <title>BattleShip</title>
-</head>
-<body>
-  <div class="cpu" id="cpu-board">˜
-  </div>
-  <div class="cpu-info">CPU INFO
-
-  </div> 
-  <div class="player-info">PLAYER INFO
-
-    <input>
-  </div> 
-
-
-  <div class="board" id="game-board">
-  </div>
-</body>
+    <title>BattleShip</title>
+  </head>
+  <body>
+    <div class="ships">
+      <button class="ship-button">BattleShip 4-Nodes</button>
+      <button class="ship-button">Cruiser 3-Nodes</button>
+      <button class="ship-button">Submarine 3-Nodes</button>
+      <button class="ship-button">Destroyer 2-Nodes</button>
+    </div>
+    <div class="board" id="game-board">
+      <div class="cpu" id="cpu-board"></div>
+    </div>
+  </body>
 </html>
