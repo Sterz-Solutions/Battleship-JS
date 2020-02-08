@@ -25,6 +25,7 @@ body {
   margin-left: 20rem;
   width: 40%;
   height: 40%;
+  color: white;
   position: relative;
 }
   .cpu {
@@ -36,6 +37,8 @@ body {
     margin-left: .05rem;
     margin-right: 10rem;
     position: absolute;
+    color: white;
+    cursor: pointer;
     /* opacity: 0%; */
   }
 
