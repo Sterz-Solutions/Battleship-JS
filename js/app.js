@@ -17,14 +17,27 @@
 // playerNodes --> board nodes
 // cpuNodes --> board nodes
 // currentTurn --> user/cpu 
-let count = 0
+let playerWinCount = 0
+let cpuWinCount = 0
 let playerNodes = []
 let firstNode = 0
 let cpuNodes = []
 let currentTurn = 'user'
 let guess = ''
+let cpuGuesses = []
 let shipLength = 0
 let gameBoard = [null, null, null, null, null, null, null, null, null, null,
+  null, null, null, null, null, null, null, null, null, null,
+  null, null, null, null, null, null, null, null, null, null,
+  null, null, null, null, null, null, null, null, null, null,
+  null, null, null, null, null, null, null, null, null, null,
+  null, null, null, null, null, null, null, null, null, null,
+  null, null, null, null, null, null, null, null, null, null,
+  null, null, null, null, null, null, null, null, null, null,
+  null, null, null, null, null, null, null, null, null, null,
+  null, null, null, null, null, null, null, null, null, null]
+
+let computerBoard = [null, null, null, null, null, null, null, null, null, null,
   null, null, null, null, null, null, null, null, null, null,
   null, null, null, null, null, null, null, null, null, null,
   null, null, null, null, null, null, null, null, null, null,
@@ -58,7 +71,6 @@ const cpu = {
 
 // gameBoard --> for stored gameboard node ids for player
 // cpuBoard --> for stored gameboard node ids for cpu
-// 
 const playerBoard = document.getElementById('game-board')
 const cpuBoard = document.getElementById("cpu-board")
 const shipButtons = document.getElementById('ships')
@@ -74,14 +86,11 @@ playerBoard.addEventListener('click', placeShip)
 // playerGuess listener
 cpuBoard.addEventListener('click', playerGuess)
 
-
-
-
 /*----- functions -----*/
 
+//--------------------------------------------------------------------------------------------
 // createBoard --> Instantiate the board with nodes 10x10 and store info for node IDs
 //  ( a1 --> j10 )
-
 function createBoard() {
   let curNode = 0;
   for (let i = 1; i < 101; i++) {
@@ -96,8 +105,8 @@ function createBoard() {
   // appendChildren(cpuBoard, cpuNodes)
 }
 
+//--------------------------------------------------------------------------------------------------------------------------------------
 // appendChildren --> add nodes to the board in HTML
-
 function appendChildren(parent, children) {
   children.forEach(function (child) {
     parent.appendChild(child)
@@ -105,14 +114,34 @@ function appendChildren(parent, children) {
   return
 }
 
+//--------------------------------------------------------------------------------------------------------------------------------------
 // boundCheck --> Check if ship placement is possible with board bounds
-
-function boundCheck() {
-  console.log('check bounds left right up down')
+// boundLeft -- boundRight -- boundUp -- boundDown
+function boundLeft(nodeToCheck) {
+  nodeToCheck + (shipLength - 1)    //IS this values final digit 1 (ex: 1,11,21,31,41,51,61,71,81,91)
 }
 
-// addNode --> To add board node within createBoard for HTML updating
+function boundRight(nodeToCheck) {
+  nodeToCheck + (shipLength - 1)    //IS this values final digit 0 (ex: 10,20,30,40,50,60,70,80,90,100)
+}
 
+function boundUp(nodeToCheck) {
+  nodeToCheck - (shipLength - 1 * 10)  // IS this value > 1-10 depending on the row
+}
+
+function boundDown(nodeToCheck) {
+  nodeToCheck + (shipLength - 1 * 10)  // IS this value < 91-100 depending on the row
+}
+
+function boundCheck(board) {
+  boundLeft()
+  boundRight()
+  boundUp()
+  boundDown()
+}
+
+//--------------------------------------------------------------------------------------------------------------------------------------
+// addNode --> To add board node within createBoard for HTML updating
 function addNode(curNode) {
   let nodeEl = document.createElement('div');
   nodeEl.setAttribute('data-id', curNode);
@@ -122,9 +151,9 @@ function addNode(curNode) {
   return nodeEl
 }
 
+//--------------------------------------------------------------------------------------------------------------------------------------
 // selectShip --> function for allowing user to select a choice of ship size for
 //                placement on the board with subsequent clicks on nodes using placeShip
-
 function selectShip(e) {
   if (e.target.getAttribute('id') === 'battleship') {
     shipLength = 5
@@ -142,6 +171,7 @@ function selectShip(e) {
 
 
 }
+//--------------------------------------------------------------------------------------------------------------------------------------
 // if (selectedNode)
 // placeShip --> function for placing a ship based on user clicking nodes
 
@@ -157,7 +187,6 @@ function placeShip(e) {
     } else if (firstNode + 10 !== selectedNode && firstNode - 10 !== selectedNode && firstNode + 1 !== selectedNode && firstNode - 1 !== selectedNode) {
 
       userPrompt.innerHTML = 'Not a valid selection'
-
     } else if (selectedNode === selectedNode + 10 || selectedNode - 10 || selectedNode + 1 || selectedNode - 1) {
       boundCheck()
       player.ships.battleship[1] = selectedNode
@@ -182,40 +211,40 @@ function placeShip(e) {
         player.ships.battleship[4] = selectedNode - 4
 
       }
+      player.ships.battleship.forEach(function (node) {
+        gameBoard[node - 1] = node;
+      })
       console.log(player.ships.battleship)
+      console.log(gameBoard)
     }
   } else if (shipLength === 4) {
 
     if (player.ships.cruiser.every(node => node === null)) {
-
       player.ships.cruiser[0] = selectedNode
-
       firstNode = player.ships.cruiser[0]
       userPrompt.innerHTML = 'Select an adjacent space left, right, up, or down to place your Cruiser in selected direction'
     } else if (firstNode + 10 !== selectedNode && firstNode - 10 !== selectedNode && firstNode + 1 !== selectedNode && firstNode - 1 !== selectedNode) {
 
       userPrompt.innerHTML = 'Not a valid selection'
-
     } else if (selectedNode === selectedNode + 10 || selectedNode - 10 || selectedNode + 1 || selectedNode - 1) {
       boundCheck()
       player.ships.cruiser[1] = selectedNode
       if (selectedNode === firstNode + 10) {
         player.ships.cruiser[2] = selectedNode + 20
         player.ships.cruiser[3] = selectedNode + 30
-
       } else if (selectedNode === firstNode - 10) {
         player.ships.cruiser[2] = selectedNode - 20
         player.ships.cruiser[3] = selectedNode - 30
-
       } else if (selectedNode === firstNode + 1) {
         player.ships.cruiser[2] = selectedNode + 2
         player.ships.cruiser[3] = selectedNode + 3
-
       } else if (selectedNode === firstNode - 1) {
         player.ships.cruiser[2] = selectedNode - 2
         player.ships.cruiser[3] = selectedNode - 3
-
       }
+      player.ships.cruiser.forEach(function (node) {
+        gameBoard[node - 1] = node;
+      })
       console.log(player.ships.cruiser)
     }
   } else if (shipLength === 3) {
@@ -226,7 +255,6 @@ function placeShip(e) {
     } else if (firstNode + 10 !== selectedNode && firstNode - 10 !== selectedNode && firstNode + 1 !== selectedNode && firstNode - 1 !== selectedNode) {
 
       userPrompt.innerHTML = 'Not a valid selection'
-
     } else if (selectedNode === selectedNode + 10 || selectedNode - 10 || selectedNode + 1 || selectedNode - 1) {
       boundCheck()
       player.ships.sub[1] = selectedNode
@@ -241,14 +269,14 @@ function placeShip(e) {
 
       } else if (selectedNode === firstNode - 1) {
         player.ships.sub[2] = selectedNode - 1
-
       }
-
     }
+    player.ships.sub.forEach(function (node) {
+      gameBoard[node - 1] = node;
+    })
     console.log(player.ships.sub)
 
   } else if (shipLength === 2) {
-    console.log('hello')
     if (player.ships.destroyer.every(node => node === null)) {
       player.ships.destroyer[0] = selectedNode
       firstNode = player.ships.destroyer[0]
@@ -256,43 +284,288 @@ function placeShip(e) {
     } else if (firstNode + 10 !== selectedNode && firstNode - 10 !== selectedNode && firstNode + 1 !== selectedNode && firstNode - 1 !== selectedNode) {
 
       userPrompt.innerHTML = 'Not a valid selection'
-
     } else if (selectedNode === selectedNode + 10 || selectedNode - 10 || selectedNode + 1 || selectedNode - 1) {
       boundCheck()
       player.ships.destroyer[1] = selectedNode
+      player.ships.destroyer.forEach(function (node) {
+        gameBoard[node - 1] = node;
+      })
       console.log(player.ships.destroyer)
       console.log(player.ships.sub)
       console.log(player.ships.cruiser)
       console.log(player.ships.battleship)
-
-
     }
   } else if (shipLength === 0) {
     console.log('Please select a ship to palce')
   }
-
-
 }
 
+
+
+
+
+
+
+
+
+//--------------------------------------------------------------------------------------------------------------------------------------
 // cpuPlace --> cpu randomly placing ship on board
-//              Can also have this place all ships on the board for CPU at once
+// Can also have this place all ships on the board for CPU at once
+
+function getRandomIntInclusive(min, max) {
+  min = Math.ceil(min)
+  max = Math.floor(max)
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
 
 
 
+function cpuPlace(ship) {
+  let check = 0
+  let cpuFirst = 0
+  let direction = 0
+  // cpuFirst = getRandomIntInclusive(1, 100)
+  // cpu.ships.ship[0] = cpuFirst
+  if (ship === 5) {
+    direction = 0
+    cpuFirst = getRandomIntInclusive(-1, -100)
+    if (cpu.ships.battleship.every(node => node === null)) {
+      cpu.ships.battleship[0] = cpuFirst
+      // pick a direction of placement randomly
+      // 1 = up   2 = right   3 = down    4 = left
+      direction = getRandomIntInclusive(1, 4)
+      switch (direction) {
+        case 1:
+          cpu.ships.battleship[1] = cpuFirst - 10
+          cpu.ships.battleship[2] = cpuFirst - 20
+          cpu.ships.battleship[3] = cpuFirst - 30
+          cpu.ships.battleship[4] = cpuFirst - 40
+          break
+        case 2:
+          cpu.ships.battleship[1] = cpuFirst + 1
+          cpu.ships.battleship[2] = cpuFirst + 2
+          cpu.ships.battleship[3] = cpuFirst + 3
+          cpu.ships.battleship[4] = cpuFirst + 4
+          break
+        case 3:
+          cpu.ships.battleship[1] = cpuFirst + 10
+          cpu.ships.battleship[2] = cpuFirst + 20
+          cpu.ships.battleship[3] = cpuFirst + 30
+          cpu.ships.battleship[4] = cpuFirst + 40
+          break
+        case 4:
+          cpu.ships.battleship[1] = cpuFirst - 1
+          cpu.ships.battleship[2] = cpuFirst - 2
+          cpu.ships.battleship[3] = cpuFirst - 3
+          cpu.ships.battleship[4] = cpuFirst - 4
+          break
+      }
+
+      cpu.ships.battleship.forEach(function (node) {
+        computerBoard[Math.abs(node) - 1] = Math.abs(node);
+      })
+      console.log(cpu.ships.battleship)
+      console.log(computerBoard)
+    }
+  } else if (ship === 4) {
+    direction = 0
+    while (check === 0) {
+      cpuFirst = getRandomIntInclusive(-1, -100)
+      cpu.ships.cruiser[0] = cpuFirst
+      // pick a direction of placement randomly
+      // 1 = up   2 = right   3 = down    4 = left
+
+      direction = getRandomIntInclusive(1, 4)
+      switch (direction) {
+        case 1:
+          cpu.ships.cruiser[1] = cpuFirst - 10
+          cpu.ships.cruiser[2] = cpuFirst - 20
+          cpu.ships.cruiser[3] = cpuFirst - 30
+          break
+        case 2:
+          cpu.ships.cruiser[1] = cpuFirst + 1
+          cpu.ships.cruiser[2] = cpuFirst + 2
+          cpu.ships.cruiser[3] = cpuFirst + 3
+          break
+        case 3:
+          cpu.ships.cruiser[1] = cpuFirst + 10
+          cpu.ships.cruiser[2] = cpuFirst + 20
+          cpu.ships.cruiser[3] = cpuFirst + 30
+          break
+        case 4:
+          cpu.ships.cruiser[1] = cpuFirst - 1
+          cpu.ships.cruiser[2] = cpuFirst - 2
+          cpu.ships.cruiser[3] = cpuFirst - 3
+          break
+      }
+      if (!cpu.ships.cruiser.forEach(function (node) {
+        computerBoard.includes(node-1)
+      })) {
+        check = 1
+        cpu.ships.cruiser.forEach(function (node) {
+          computerBoard[Math.abs(node) - 1] = Math.abs(node);
+        })
+      }
+    }
+    check = 0
+    console.log(cpu.ships.cruiser)
+    console.log(computerBoard)
+  } else if (ship === 3) {
+    direction = 0
+    while (check === 0) {
+      cpuFirst = getRandomIntInclusive(-1, -100)
+      cpu.ships.sub[0] = cpuFirst
+      // pick a direction of placement randomly
+      // 1 = up   2 = right   3 = down    4 = left
+      direction = getRandomIntInclusive(1, 4)
+      switch (direction) {
+        case 1:
+          cpu.ships.sub[1] = cpuFirst - 10
+          cpu.ships.sub[2] = cpuFirst - 20
+          break
+        case 2:
+          cpu.ships.sub[1] = cpuFirst + 1
+          cpu.ships.sub[2] = cpuFirst + 2
+          break
+        case 3:
+          cpu.ships.sub[1] = cpuFirst + 10
+          cpu.ships.sub[2] = cpuFirst + 20
+          break
+        case 4:
+          cpu.ships.sub[1] = cpuFirst - 1
+          cpu.ships.sub[2] = cpuFirst - 2
+          break
+      }
+      if (!cpu.ships.sub.forEach(function (node) {
+        computerBoard.includes(node-1)
+      })) {
+        check = 1
+        cpu.ships.sub.forEach(function (node) {
+          computerBoard[Math.abs(node) - 1] = Math.abs(node);
+        })
+      }
+    }
+    check = 0
+    console.log(cpu.ships.sub)
+    console.log(computerBoard)
+  } else if (ship === 2) {
+    direction = 0
+    while (check == 0) {
+      cpuFirst = getRandomIntInclusive(-1, -100)
+      cpu.ships.destroyer[0] = cpuFirst
+      // pick a direction of placement randomly
+      // 1 = up   2 = right   3 = down    4 = left
+      direction = getRandomIntInclusive(1, 4)
+      switch (direction) {
+        case 1:
+          cpu.ships.destroyer[1] = cpuFirst - 10
+          break
+        case 2:
+          cpu.ships.destroyer[1] = cpuFirst + 1
+          break
+        case 3:
+          cpu.ships.destroyer[1] = cpuFirst + 10
+          break
+        case 4:
+          cpu.ships.destroyer[1] = cpuFirst - 1
+          break
+      }
+      if (!cpu.ships.destroyer.forEach(function (node) {
+        computerBoard.includes(node-1)
+      })) {
+        check = 1
+      }
+      cpu.ships.destroyer.forEach(function (node) {
+        computerBoard[Math.abs(node) - 1] = Math.abs(node);
+      })
+    }
+    check = 0
+    console.log(cpu.ships.destroyer)
+    console.log(cpu.ships.sub)
+    console.log(cpu.ships.cruiser)
+    console.log(cpu.ships.battleship)
+    console.log(computerBoard)
+  }
+}
+
+//--------------------------------------------------------------------------------------------------------------------------------------
 // playerGuess --> get users guess for hit with click on a cpu node 
-
 function playerGuess(e) {
   guess = e.target.getAttribute('data-id')
   console.log(guess)
 }
 
+//--------------------------------------------------------------------------------------------------------------------------------------
 // cpuGuess --> randomize cpu guess of a players node
-// checkHit --> check if guess is a hit on a ship
-// applyHit --> applies a hit to the board if checkHit passes
-// applyMiss --> applies a miss to the board if checkHit fails
-// winCheck --> check for win to be called within checkHit 
-// turnSwap --> swap the turn from user to cpu or cpu to user swapping currentTurn
 
+function cpuGuess() {
+  guess = Math.getRandomIntInclusive(1,100)
+  while(cpuGuesses.includes(guess)) {
+    guess = Math.getRandomIntInclusive(1,100)
+  }
+  if(checkHit(guess)){
+    applyHit(guess)
+  } else if(!checkHit(guess)){
+    applyMiss(guess)
+  }
+  cpuGuesses.push(guess)
+}
+
+//--------------------------------------------------------------------------------------------------------------------------------------
+// checkHit --> check if guess is a hit on a ship
+
+function checkHit(guess) {
+  if(currentTurn === 'user') {
+    if(computerBoard.includes(guess)) {
+      return true
+    } else if (!computerBoard.includes(guess)) {
+      return false
+    }
+  } else if(currentTurn === 'cpu') {
+    if(playerBoard.includes(guess)) {
+      return true 
+    } else if(!playerBoard.includes(guess)) {
+      return false
+    }
+  }
+}
+
+//--------------------------------------------------------------------------------------------------------------------------------------
+// applyHit --> applies a hit to the board if checkHit passes
+function applyHit(guess) {
+  if(currentTurn === 'user'){
+    console.log(`User hit node ${guess}`)
+    computerBoard[guess - 1] = 0 // Will eventually apply visual effect and sound to this position 
+    playerWinCount += 1
+  } else if(currentTurn === 'cpu') {
+    console.log(`Cpu hit node ${guess}`)
+    computerBoard[guess - 1] = 0 // Will eventually apply visual effect and sound to this position 
+    cpuWinCount += 1
+  }
+}
+
+//--------------------------------------------------------------------------------------------------------------------------------------
+// applyMiss --> applies a miss to the board if checkHit fails
+function applyMiss(guess) {
+  if(currentTurn === 'user') {
+    //Apply visual and sound effects to this position
+    console.log(`User missed at node ${guess}`)
+  } else if(currentTurn === 'cpu') {
+    //Apply visual and sound effects to this position
+    console.log(`User missed at node ${guess}`)
+  }
+}
+
+//--------------------------------------------------------------------------------------------------------------------------------------
+// winCheck --> check for win to be called within checkHit 
+function winCheck() {
+  if (playerWinCount === 14) return true
+  else if (cpuWinCount === 14) return true
+  else return false
+}
+
+//--------------------------------------------------------------------------------------------------------------------------------------
+// turnSwap --> swap the turn from user to cpu or cpu to user swapping currentTurn
 function playerSwap() {
   if (currentTurn === 'user') {
     cpuBoard.style.opacity = '0%'
@@ -310,7 +583,7 @@ function playerSwap() {
   }
 }
 
-
+//--------------------------------------------------------------------------------------------------------------------------------------
 // RENDER FUNCTION
 function render(cb) {
   cb()
@@ -338,7 +611,11 @@ function render(cb) {
 
 createBoard()
 // appendChildren(gameBoard, playerNodes)
-appendChildren(playerBoard, playerNodes)
+appendChildren(cpuBoard, cpuNodes)
+cpuPlace(5)
+cpuPlace(4)
+cpuPlace(3)
+cpuPlace(2)
 
 // playerSwap();
 // playerSwap();
