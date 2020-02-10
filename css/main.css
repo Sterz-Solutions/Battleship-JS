@@ -1,9 +1,9 @@
-body {
-  /* display: grid; */
-  /* grid-template-areas: 
+/* body {
+  display: grid;
+  grid-template-areas: 
   ".cpu" ".cpu-info"
-  ".player-info" ".board"; */
-}
+  ".player-info" ".board";
+} */
 
 .ships {
   border: dotted green;

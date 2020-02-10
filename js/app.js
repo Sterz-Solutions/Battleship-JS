@@ -17,6 +17,9 @@
 // playerNodes --> board nodes
 // cpuNodes --> board nodes
 // currentTurn --> user/cpu 
+let prevHit = Boolean
+let nextCpuGuess = [null, null, null, null]
+let isBound = Boolean
 let playerWinCount = 0
 let cpuWinCount = 0
 let playerNodes = []
@@ -125,8 +128,16 @@ function boundRight(nodeToCheck) {
   nodeToCheck + (shipLength - 1)    //IS this values final digit 0 (ex: 10,20,30,40,50,60,70,80,90,100)
 }
 
-function boundUp(nodeToCheck) {
-  nodeToCheck - (shipLength - 1 * 10)  // IS this value > 1-10 depending on the row
+// Vertical bounds check for negative numbers
+function boundVerticalNeg(nodeToCheck) {
+  if (nodeToCheck > -100 && nodeToCheck < -1) return true
+  else return false
+}
+
+// Vertical bounds check for positive numbers
+function boundVerticalPos(nodeToCheck) {
+  if (nodeToCheck < 100 && nodeToCheck > 1) return true
+  else return false
 }
 
 function boundDown(nodeToCheck) {
@@ -188,7 +199,6 @@ function placeShip(e) {
 
       userPrompt.innerHTML = 'Not a valid selection'
     } else if (selectedNode === selectedNode + 10 || selectedNode - 10 || selectedNode + 1 || selectedNode - 1) {
-      boundCheck()
       player.ships.battleship[1] = selectedNode
       if (selectedNode === firstNode + 10) {
         player.ships.battleship[2] = selectedNode + 20
@@ -227,7 +237,6 @@ function placeShip(e) {
 
       userPrompt.innerHTML = 'Not a valid selection'
     } else if (selectedNode === selectedNode + 10 || selectedNode - 10 || selectedNode + 1 || selectedNode - 1) {
-      boundCheck()
       player.ships.cruiser[1] = selectedNode
       if (selectedNode === firstNode + 10) {
         player.ships.cruiser[2] = selectedNode + 20
@@ -256,7 +265,6 @@ function placeShip(e) {
 
       userPrompt.innerHTML = 'Not a valid selection'
     } else if (selectedNode === selectedNode + 10 || selectedNode - 10 || selectedNode + 1 || selectedNode - 1) {
-      boundCheck()
       player.ships.sub[1] = selectedNode
       if (selectedNode === firstNode + 10) {
         player.ships.sub[2] = selectedNode + 10
@@ -285,7 +293,6 @@ function placeShip(e) {
 
       userPrompt.innerHTML = 'Not a valid selection'
     } else if (selectedNode === selectedNode + 10 || selectedNode - 10 || selectedNode + 1 || selectedNode - 1) {
-      boundCheck()
       player.ships.destroyer[1] = selectedNode
       player.ships.destroyer.forEach(function (node) {
         gameBoard[node - 1] = node;
@@ -319,7 +326,6 @@ function getRandomIntInclusive(min, max) {
 }
 
 
-
 function cpuPlace(ship) {
   let check = 0
   let cpuFirst = 0
@@ -327,6 +333,7 @@ function cpuPlace(ship) {
   // cpuFirst = getRandomIntInclusive(1, 100)
   // cpu.ships.ship[0] = cpuFirst
   if (ship === 5) {
+    // do {
     direction = 0
     cpuFirst = getRandomIntInclusive(-1, -100)
     if (cpu.ships.battleship.every(node => node === null)) {
@@ -340,6 +347,9 @@ function cpuPlace(ship) {
           cpu.ships.battleship[2] = cpuFirst - 20
           cpu.ships.battleship[3] = cpuFirst - 30
           cpu.ships.battleship[4] = cpuFirst - 40
+          cpu.ships.battleship.forEach(function (node) {    // BOUND CHECK EVERY SHIP IF PLACEMENT WAS VERITCAL
+            boundVerticalNeg(node)
+          }) ? isBound = true : isBound = false
           break
         case 2:
           cpu.ships.battleship[1] = cpuFirst + 1
@@ -352,6 +362,9 @@ function cpuPlace(ship) {
           cpu.ships.battleship[2] = cpuFirst + 20
           cpu.ships.battleship[3] = cpuFirst + 30
           cpu.ships.battleship[4] = cpuFirst + 40
+          cpu.ships.battleship.forEach(function (node) {    // BOUND CHECK EVERY SHIP IF PLACEMENT WAS VERITCAL
+            boundVerticalNeg(node)
+          }) ? isBound = true : isBound = false
           break
         case 4:
           cpu.ships.battleship[1] = cpuFirst - 1
@@ -367,7 +380,9 @@ function cpuPlace(ship) {
       console.log(cpu.ships.battleship)
       console.log(computerBoard)
     }
+    // } while (!isBound)
   } else if (ship === 4) {
+    // do {
     direction = 0
     while (check === 0) {
       cpuFirst = getRandomIntInclusive(-1, -100)
@@ -381,6 +396,9 @@ function cpuPlace(ship) {
           cpu.ships.cruiser[1] = cpuFirst - 10
           cpu.ships.cruiser[2] = cpuFirst - 20
           cpu.ships.cruiser[3] = cpuFirst - 30
+          cpu.ships.cruiser.forEach(function (node) {   // BOUND CHECK EVERY SHIP IF PLACEMENT WAS VERITCAL
+            boundVerticalNeg(node)
+          }) ? isBound = true : isBound = false
           break
         case 2:
           cpu.ships.cruiser[1] = cpuFirst + 1
@@ -391,6 +409,9 @@ function cpuPlace(ship) {
           cpu.ships.cruiser[1] = cpuFirst + 10
           cpu.ships.cruiser[2] = cpuFirst + 20
           cpu.ships.cruiser[3] = cpuFirst + 30
+          cpu.ships.cruiser.forEach(function (node) {  // BOUND CHECK EVERY SHIP IF PLACEMENT WAS VERITCAL
+            boundVerticalNeg(node)
+          }) ? isBound = true : isBound = false
           break
         case 4:
           cpu.ships.cruiser[1] = cpuFirst - 1
@@ -399,7 +420,7 @@ function cpuPlace(ship) {
           break
       }
       if (!cpu.ships.cruiser.forEach(function (node) {
-        computerBoard.includes(node-1)
+        computerBoard.includes(node - 1)
       })) {
         check = 1
         cpu.ships.cruiser.forEach(function (node) {
@@ -410,7 +431,9 @@ function cpuPlace(ship) {
     check = 0
     console.log(cpu.ships.cruiser)
     console.log(computerBoard)
+    // } while (!isBound)
   } else if (ship === 3) {
+    // do {
     direction = 0
     while (check === 0) {
       cpuFirst = getRandomIntInclusive(-1, -100)
@@ -422,6 +445,9 @@ function cpuPlace(ship) {
         case 1:
           cpu.ships.sub[1] = cpuFirst - 10
           cpu.ships.sub[2] = cpuFirst - 20
+          cpu.ships.sub.forEach(function (node) {  // BOUND CHECK EVERY SHIP IF PLACEMENT WAS VERITCAL
+            boundVerticalNeg(node)
+          }) ? isBound = true : isBound = false
           break
         case 2:
           cpu.ships.sub[1] = cpuFirst + 1
@@ -430,6 +456,9 @@ function cpuPlace(ship) {
         case 3:
           cpu.ships.sub[1] = cpuFirst + 10
           cpu.ships.sub[2] = cpuFirst + 20
+          cpu.ships.sub.forEach(function (node) {  // BOUND CHECK EVERY SHIP IF PLACEMENT WAS VERITCAL
+            boundVerticalNeg(node)
+          }) ? isBound = true : isBound = false
           break
         case 4:
           cpu.ships.sub[1] = cpuFirst - 1
@@ -437,7 +466,7 @@ function cpuPlace(ship) {
           break
       }
       if (!cpu.ships.sub.forEach(function (node) {
-        computerBoard.includes(node-1)
+        computerBoard.includes(node - 1)
       })) {
         check = 1
         cpu.ships.sub.forEach(function (node) {
@@ -448,7 +477,9 @@ function cpuPlace(ship) {
     check = 0
     console.log(cpu.ships.sub)
     console.log(computerBoard)
+    // } while (!isBound)
   } else if (ship === 2) {
+    // do {
     direction = 0
     while (check == 0) {
       cpuFirst = getRandomIntInclusive(-1, -100)
@@ -459,19 +490,25 @@ function cpuPlace(ship) {
       switch (direction) {
         case 1:
           cpu.ships.destroyer[1] = cpuFirst - 10
+          cpu.ships.destroyer.forEach(function (node) {  // BOUND CHECK EVERY SHIP IF PLACEMENT WAS VERITCAL
+            boundVerticalNeg(node)
+          }) ? isBound = true : isBound = false
           break
         case 2:
           cpu.ships.destroyer[1] = cpuFirst + 1
           break
         case 3:
           cpu.ships.destroyer[1] = cpuFirst + 10
+          cpu.ships.destroyer.forEach(function (node) {  // BOUND CHECK EVERY SHIP IF PLACEMENT WAS VERITCAL
+            boundVerticalNeg(node)
+          }) ? isBound = true : isBound = false
           break
         case 4:
           cpu.ships.destroyer[1] = cpuFirst - 1
           break
       }
       if (!cpu.ships.destroyer.forEach(function (node) {
-        computerBoard.includes(node-1)
+        computerBoard.includes(node - 1)
       })) {
         check = 1
       }
@@ -485,6 +522,7 @@ function cpuPlace(ship) {
     console.log(cpu.ships.cruiser)
     console.log(cpu.ships.battleship)
     console.log(computerBoard)
+    // } while (!isBound)
   }
 }
 
@@ -496,35 +534,45 @@ function playerGuess(e) {
 }
 
 //--------------------------------------------------------------------------------------------------------------------------------------
+// shipSunk --> check for isSunk for ship
+
+
+//--------------------------------------------------------------------------------------------------------------------------------------
 // cpuGuess --> randomize cpu guess of a players node
 
 function cpuGuess() {
-  guess = Math.getRandomIntInclusive(1,100)
-  while(cpuGuesses.includes(guess)) {
-    guess = Math.getRandomIntInclusive(1,100)
+  if (prevHit === false) {
+    guess = Math.getRandomIntInclusive(1, 100)
+    while (cpuGuesses.includes(guess)) {
+      guess = Math.getRandomIntInclusive(1, 100)
+    }
+    if (checkHit(guess)) {
+      prevHit = true
+      applyHit(guess)
+    } else if (!checkHit(guess)) {
+      prevHit = false
+      applyMiss(guess)
+    }
+    cpuGuesses.push(guess)
+  } else if(prevHit === true) {
+    
   }
-  if(checkHit(guess)){
-    applyHit(guess)
-  } else if(!checkHit(guess)){
-    applyMiss(guess)
-  }
-  cpuGuesses.push(guess)
 }
 
 //--------------------------------------------------------------------------------------------------------------------------------------
 // checkHit --> check if guess is a hit on a ship
 
 function checkHit(guess) {
-  if(currentTurn === 'user') {
-    if(computerBoard.includes(guess)) {
+  if (currentTurn === 'user') {
+    if (computerBoard.includes(guess)) {
       return true
     } else if (!computerBoard.includes(guess)) {
       return false
     }
-  } else if(currentTurn === 'cpu') {
-    if(playerBoard.includes(guess)) {
-      return true 
-    } else if(!playerBoard.includes(guess)) {
+  } else if (currentTurn === 'cpu') {
+    if (playerBoard.includes(guess)) {
+      return true
+    } else if (!playerBoard.includes(guess)) {
       return false
     }
   }
@@ -533,13 +581,13 @@ function checkHit(guess) {
 //--------------------------------------------------------------------------------------------------------------------------------------
 // applyHit --> applies a hit to the board if checkHit passes
 function applyHit(guess) {
-  if(currentTurn === 'user'){
+  if (currentTurn === 'user') {
     console.log(`User hit node ${guess}`)
-    computerBoard[guess - 1] = 0 // Will eventually apply visual effect and sound to this position 
+    computerBoard[guess - 1] = null // Will eventually apply visual effect and sound to this position 
     playerWinCount += 1
-  } else if(currentTurn === 'cpu') {
+  } else if (currentTurn === 'cpu') {
     console.log(`Cpu hit node ${guess}`)
-    computerBoard[guess - 1] = 0 // Will eventually apply visual effect and sound to this position 
+    computerBoard[guess - 1] = null // Will eventually apply visual effect and sound to this position 
     cpuWinCount += 1
   }
 }
@@ -547,10 +595,10 @@ function applyHit(guess) {
 //--------------------------------------------------------------------------------------------------------------------------------------
 // applyMiss --> applies a miss to the board if checkHit fails
 function applyMiss(guess) {
-  if(currentTurn === 'user') {
+  if (currentTurn === 'user') {
     //Apply visual and sound effects to this position
     console.log(`User missed at node ${guess}`)
-  } else if(currentTurn === 'cpu') {
+  } else if (currentTurn === 'cpu') {
     //Apply visual and sound effects to this position
     console.log(`User missed at node ${guess}`)
   }
