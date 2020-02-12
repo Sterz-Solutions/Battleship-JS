@@ -2,7 +2,6 @@
 
 /*----- constants -----*/
 
-
 /*----- app's state (variables) -----*/
 
 // Ship Locations 
@@ -33,8 +32,8 @@ let cpuWinCount = 0
 let playerNodes = []
 let firstNode = 0
 let cpuNodes = []
-let currentTurn = 'user'
-let guess = ''
+let currentTurn = 'cpu'
+let guess = 0
 let shipLength = 0
 let gameBoard = [null, null, null, null, null, null, null, null, null, null,
   null, null, null, null, null, null, null, null, null, null,
@@ -137,37 +136,45 @@ function appendChildren(parent, children) {
 
 //--------------------------------------------------------------------------------------------------------------------------------------
 // boundCheck --> Check if ship placement is possible with board bounds
-// boundLeft -- boundRight -- boundUp -- boundDown
-function boundLeft(nodeToCheck) {
-  nodeToCheck + (shipLength - 1)    //IS this values final digit 1 (ex: 1,11,21,31,41,51,61,71,81,91)
-}
-
-function boundRight(nodeToCheck) {
-  nodeToCheck + (shipLength - 1)    //IS this values final digit 0 (ex: 10,20,30,40,50,60,70,80,90,100)
-}
 
 // Horizontal bounds check for positive numbers
-function boundHorizontalPos(nodeToCheck) {
-  // stuff
+function boundHorizontalPos(guess) {
+  if (Guess.prevHits[0] >= 1 && Guess.prevHits[0] <= 10 && guess >= 1 && guess <= 10) {
+    isBound = true
+  } else if (Guess.prevHits[0] >= 11 && Guess.prevHits[0] <= 20 && guess >= 11 && guess <= 20) {
+    isBound = true
+  } else if (Guess.prevHits[0] >= 21 && Guess.prevHits[0] <= 30 && guess >= 21 && guess <= 30) {
+    isBound = true
+  } else if (Guess.prevHits[0] >= 31 && Guess.prevHits[0] <= 40 && guess >= 21 && guess <= 40) {
+    isBound = true
+  } else if (Guess.prevHits[0] >= 41 && Guess.prevHits[0] <= 50 && guess >= 31 && guess <= 50) {
+    isBound = true
+  } else if (Guess.prevHits[0] >= 51 && Guess.prevHits[0] <= 60 && guess >= 41 && guess <= 60) {
+    isBound = true
+  } else if (Guess.prevHits[0] >= 61 && Guess.prevHits[0] <= 70 && guess >= 51 && guess <= 70) {
+    isBound = true
+  } else if (Guess.prevHits[0] >= 71 && Guess.prevHits[0] <= 80 && guess >= 61 && guess <= 80) {
+    isBound = true
+  } else if (Guess.prevHits[0] >= 81 && Guess.prevHits[0] <= 90 && guess >= 71 && guess <= 90) {
+    isBound = true
+  } else if (Guess.prevHits[0] >= 91 && Guess.prevHits[0] <= 100 && guess >= 81 && guess <= 100) {
+    isBound = true
+  } else isBound = false
 }
 
 
 // Vertical bounds check for negative numbers
 function boundVerticalNeg(nodeToCheck) {
-  if (nodeToCheck > -100 && nodeToCheck < -1) return true
-  else return false
+  if (nodeToCheck > -100 && nodeToCheck < -1) isBound = true
+  else isBound = false
 }
 
 // Vertical bounds check for positive numbers
 function boundVerticalPos(nodeToCheck) {
-  if (nodeToCheck < 100 && nodeToCheck > 1) return true
-  else return false
+  if (nodeToCheck < 100 && nodeToCheck > 1) isBound = true
+  else isBound = false
 }
 
-function boundCheck(board) {
-  boundLeft()
-  boundRight()
-}
 
 //--------------------------------------------------------------------------------------------------------------------------------------
 // addNode --> To add board node within createBoard for HTML updating
@@ -297,7 +304,7 @@ function placeShip(e) {
         player.ships.sub.pegs[2] = selectedNode - 1
       }
     }
-    player.ships.sub.forEach(function (node) {
+    player.ships.sub.pegs.forEach(function (node) {
       gameBoard[node - 1] = node;
     })
     console.log(player.ships.sub.pegs)
@@ -319,9 +326,36 @@ function placeShip(e) {
       console.log(player.ships.sub.pegs)
       console.log(player.ships.cruiser.pegs)
       console.log(player.ships.battleship.pegs)
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+
+    } else if (shipLength === 0) {
+      console.log('Please select a ship to palce')
     }
-  } else if (shipLength === 0) {
-    console.log('Please select a ship to palce')
   }
 }
 
@@ -594,43 +628,40 @@ function checkSunk(guess) {
 function cpuGuess() {
   let vertGuess = 0
   let horizGuess = 0
-  if (Guess.prevHits.length < 1) {
-    guess = Math.getRandomIntInclusive(1, 100)
-    while (Guess.cpuGuesses.includes(guess)) {
-      guess = Math.getRandomIntInclusive(1, 100)
-    }
-    if (checkHit(guess)) {
-      Guess.prevHits.push(guess)
-      Guess.cpuGuesses.push(guess)
-    } else Guess.cpuGuesses.push(guess)
-    //nextDirection = getRandomIntInclusive(1, 4)
-    //while(nextDirection === Guess.cpu) -> 
-  } else if (Guess.prevHits.length === 1) { // DO WHILE LOOP ------------------
-    Guess.cpuGuessDirection = getRandomIntInclusive(1, 4)
-    guess = Guess.prevHits[0]
-    switch (Guess.cpuGuessDirection) {
-      case 1:
-        guess = guess - 10
-        if (boundVerticalPos(guess)) {
+  do {
+    if (Guess.prevHits.length < 1) {
+      guess = getRandomIntInclusive(1, 100)
+      while (Guess.cpuGuesses.includes(guess)) {
+        guess = getRandomIntInclusive(1, 100)
+      }
+      if (checkHit(guess)) {
+        Guess.prevHits.push(guess)
+        Guess.cpuGuesses.push(guess)
+      } else Guess.cpuGuesses.push(guess)
+    } else if (Guess.prevHits.length === 1) {
+      Guess.cpuGuessDirection = getRandomIntInclusive(1, 4)
+      guess = Guess.prevHits[0]
+      switch (Guess.cpuGuessDirection) {
+        case 1:
+          guess = guess - 10
+          boundVerticalPos(guess)
           if (checkHit(guess)) {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
             Guess.prevDirection.hit = true
             checkSunk(guess)
             Guess.cpuGuesses.push(guess)
             Guess.prevHits.push(guess)
-            // IF GUESS IS IN cpuGUESSES THEN GO TO OTHER VERT POSITION
           } else {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
             Guess.prevDirection.hit = false
             Guess.cpuGuesses.push(guess)
 
           }
-        }
-        break
-      case 2:
-        guess = guess + 1
-        if (boundHorizontalPos(guess)) {
-          //check sunk if sunk clear prevHits
+
+          break
+        case 2:
+          guess = guess + 1
+          boundHorizontalPos(guess)
           if (checkHit(guess)) {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
             Guess.prevDirection.hit = true
@@ -642,11 +673,11 @@ function cpuGuess() {
             Guess.prevDirection.hit = false
             Guess.cpuGuesses.push(guess)
           }
-        }
-        break
-      case 3:
-        guess = guess + 10
-        if (boundVerticalPos(guess)) {
+
+          break
+        case 3:
+          guess = guess + 10
+          boundVerticalPos(guess)
           if (checkHit(guess)) {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
             Guess.prevDirection.hit = true
@@ -659,11 +690,11 @@ function cpuGuess() {
             Guess.prevDirection.hit = false
             Guess.cpuGuesses.push(guess)
           }
-        }
-        break
-      case 4:
-        guess = guess - 1
-        if (boundHorizontalPos(guess)) {
+
+          break
+        case 4:
+          guess = guess - 1
+          boundHorizontalPos(guess)
           //check sunk if sunk clear prevHits
           if (checkHit(guess)) {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
@@ -676,40 +707,19 @@ function cpuGuess() {
             Guess.prevDirection.hit = false
             Guess.cpuGuesses.push(guess)
           }
-        }
-        break
-    } // DO WHILE LOOP ------------------
-  } else if (Guess.prevHits.length > 1) {
-    if (Guess.prevDirection.direction === 1 || Guess.prevDirection.direction === 3) { // We know its Vertical
-      vertGuess = getRandomIntInclusive(1, 2)
-      if (vertGuess === 1) { // GUESS UP WITHIN BOUNDS AND NOT IN CPUGUESSES
-        if (Guess.prevHits[0] > Guess.prevHits[Guess.prevHits.length - 1]) {
-          guess = Guess.prevHits[Guess.prevHits.length - 1] - 10
-        } else {
-          guess = Guess.prevHits[0] - 10
-        }
-        if (boundVerticalPos(guess)) {
-          if (checkHit(guess)) {
-            Guess.prevDirection.direction = Guess.cpuGuessDirection
-            Guess.prevDirection.hit = true
-            checkSunk(guess)
-            Guess.cpuGuesses.push(guess)
-            Guess.prevHits.push(guess)
-          } else {
-            Guess.prevDirection.direction = Guess.cpuGuessDirection
-            Guess.prevDirection.hit = false
-            Guess.cpuGuesses.push(guess)
-          }
-        }
-        // IF GUESS IS IN cpuGUESSES THEN GO TO OTHER VERT POSITION
+
+          break
       }
-      else { // GUESS DOWN WITHIN BOUNDS AND NOT IN CPUGUESSES
-        if (Guess.prevHits[0] < Guess.prevHits[Guess.prevHits.length - 1]) {
-          guess = Guess.prevHits[Guess.prevHits.length - 1] + 10
-        } else {
-          guess = Guess.prevHits[0] + 10
-        }
-        if (boundVerticalPos(guess)) {
+    } else if (Guess.prevHits.length > 1) {
+      if (Guess.prevDirection.direction === 1 || Guess.prevDirection.direction === 3) { // We know its Vertical
+        vertGuess = getRandomIntInclusive(1, 2)
+        if (vertGuess === 1) { // GUESS UP WITHIN BOUNDS AND NOT IN CPUGUESSES
+          if (Guess.prevHits[0] > Guess.prevHits[Guess.prevHits.length - 1]) {
+            guess = Guess.prevHits[Guess.prevHits.length - 1] - 10
+          } else {
+            guess = Guess.prevHits[0] - 10
+          }
+          boundVerticalPos(guess)
           if (checkHit(guess)) {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
             Guess.prevDirection.hit = true
@@ -721,17 +731,15 @@ function cpuGuess() {
             Guess.prevDirection.hit = false
             Guess.cpuGuesses.push(guess)
           }
+
         }
-      }
-    } else { // We know its horizontal 
-      horizGuess = getRandomIntInclusive(1, 2)
-      if (horizGuess === 1) { // GUESS RIGHT WITHIN BOUNDS AND NOT IN CPU GUESSES
-        if (Guess.prevHits[0] < Guess.prevHits[Guess.prevHits.length - 1]) {
-          guess = Guess.prevHits[Guess.prevHits.length - 1] + 1
-        } else {
-          guess = Guess.prevHits[0] + 1
-        }
-        if (boundHorizontalPos(guess)) {
+        else { // GUESS DOWN WITHIN BOUNDS AND NOT IN CPUGUESSES
+          if (Guess.prevHits[0] < Guess.prevHits[Guess.prevHits.length - 1]) {
+            guess = Guess.prevHits[Guess.prevHits.length - 1] + 10
+          } else {
+            guess = Guess.prevHits[0] + 10
+          }
+          boundVerticalPos(guess)
           if (checkHit(guess)) {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
             Guess.prevDirection.hit = true
@@ -743,15 +751,17 @@ function cpuGuess() {
             Guess.prevDirection.hit = false
             Guess.cpuGuesses.push(guess)
           }
+
         }
-      }
-      else {  // GUESS LEFT WITHIN BOUNDS AND NOT IN CPU GUESSES
-        if (Guess.prevHits[0] > Guess.prevHits[Guess.prevHits.length - 1]) {
-          guess = Guess.prevHits[Guess.prevHits.length - 1] - 1
-        } else {
-          guess = Guess.prevHits[0] - 1
-        }
-        if (boundHorizontalPos(guess)) {
+      } else { // We know its horizontal 
+        horizGuess = getRandomIntInclusive(1, 2)
+        if (horizGuess === 1) { // GUESS RIGHT WITHIN BOUNDS AND NOT IN CPU GUESSES
+          if (Guess.prevHits[0] < Guess.prevHits[Guess.prevHits.length - 1]) {
+            guess = Guess.prevHits[Guess.prevHits.length - 1] + 1
+          } else {
+            guess = Guess.prevHits[0] + 1
+          }
+          boundHorizontalPos(guess)
           if (checkHit(guess)) {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
             Guess.prevDirection.hit = true
@@ -763,10 +773,35 @@ function cpuGuess() {
             Guess.prevDirection.hit = false
             Guess.cpuGuesses.push(guess)
           }
+
+        }
+        else {  // GUESS LEFT WITHIN BOUNDS AND NOT IN CPU GUESSES
+          if (Guess.prevHits[0] > Guess.prevHits[Guess.prevHits.length - 1]) {
+            guess = Guess.prevHits[Guess.prevHits.length - 1] - 1
+          } else {
+            guess = Guess.prevHits[0] - 1
+          }
+          boundHorizontalPos(guess)
+          if (checkHit(guess)) {
+            Guess.prevDirection.direction = Guess.cpuGuessDirection
+            Guess.prevDirection.hit = true
+            checkSunk(guess)
+            Guess.cpuGuesses.push(guess)
+            Guess.prevHits.push(guess)
+          } else {
+            Guess.prevDirection.direction = Guess.cpuGuessDirection
+            Guess.prevDirection.hit = false
+            Guess.cpuGuesses.push(guess)
+          }
+
         }
       }
     }
-  }
+  } while (hasGuessed(guess) && !isBound) // && isBound)
+  console.log(guess)
+  console.log(Guess)
+  console.log(isBound)
+
 }
 
 
@@ -790,10 +825,10 @@ function checkHit(guess) {
       return false
     }
   } else if (currentTurn === 'cpu') {
-    if (playerBoard.includes(guess)) {
+    if (gameBoard.includes(guess)) {
       applyHit(guess)
       return true
-    } else if (!playerBoard.includes(guess)) {
+    } else if (!gameBoard.includes(guess)) {
       applyMiss(guess)
       return false
     }
@@ -809,7 +844,7 @@ function applyHit(guess) {
     playerWinCount += 1
   } else if (currentTurn === 'cpu') {
     console.log(`Cpu hit node ${guess}`)
-    computerBoard[guess - 1] = null // Will eventually apply visual effect and sound to this position 
+    gameBoard[guess - 1] = null // Will eventually apply visual effect and sound to this position 
     cpuWinCount += 1
   }
 }
@@ -822,7 +857,7 @@ function applyMiss(guess) {
     console.log(`User missed at node ${guess}`)
   } else if (currentTurn === 'cpu') {
     //Apply visual and sound effects to this position
-    console.log(`User missed at node ${guess}`)
+    console.log(`cpu missed at node ${guess}`)
   }
 }
 
@@ -880,13 +915,13 @@ function render(cb) {
 
 
 createBoard()
-// appendChildren(gameBoard, playerNodes)
-appendChildren(cpuBoard, cpuNodes)
-cpuPlace(5)
-cpuPlace(4)
-cpuPlace(3)
-cpuPlace(2)
-console.log(cpu.ships.battleship.length)
+// appendChildren(cpuBoard, cpuNodes)
+appendChildren(playerBoard, playerNodes)
+// cpuPlace(5)
+// cpuPlace(4)
+// cpuPlace(3)
+// cpuPlace(2)
+// console.log(cpu.ships.battleship.length)
 
 // playerSwap();
 // playerSwap();
