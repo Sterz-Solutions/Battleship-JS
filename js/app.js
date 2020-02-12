@@ -162,7 +162,6 @@ function boundHorizontalPos(guess) {
   } else isBound = false
 }
 
-
 // Vertical bounds check for negative numbers
 function boundVerticalNeg(nodeToCheck) {
   if (nodeToCheck > -100 && nodeToCheck < -1) isBound = true
@@ -226,14 +225,14 @@ function placeShip(e) {
     } else if (selectedNode === selectedNode + 10 || selectedNode - 10 || selectedNode + 1 || selectedNode - 1) {
       player.ships.battleship.pegs[1] = selectedNode
       if (selectedNode === firstNode + 10) {
-        player.ships.battleship.pegs[2] = selectedNode + 20
-        player.ships.battleship.pegs[3] = selectedNode + 30
-        player.ships.battleship.pegs[4] = selectedNode + 40
+        player.ships.battleship.pegs[2] = selectedNode + 10
+        player.ships.battleship.pegs[3] = selectedNode + 20
+        player.ships.battleship.pegs[4] = selectedNode + 30
 
       } else if (selectedNode === firstNode - 10) {
-        player.ships.battleship.pegs[2] = selectedNode - 20
-        player.ships.battleship.pegs[3] = selectedNode - 30
-        player.ships.battleship.pegs[4] = selectedNode - 40
+        player.ships.battleship.pegs[2] = selectedNode - 10
+        player.ships.battleship.pegs[3] = selectedNode - 20
+        player.ships.battleship.pegs[4] = selectedNode - 30
 
       } else if (selectedNode === firstNode + 1) {
         player.ships.battleship.pegs[2] = selectedNode + 2
@@ -264,11 +263,11 @@ function placeShip(e) {
     } else if (selectedNode === selectedNode + 10 || selectedNode - 10 || selectedNode + 1 || selectedNode - 1) {
       player.ships.cruiser.pegs[1] = selectedNode
       if (selectedNode === firstNode + 10) {
-        player.ships.cruiser.pegs[2] = selectedNode + 20
-        player.ships.cruiser.pegs[3] = selectedNode + 30
+        player.ships.cruiser.pegs[2] = selectedNode + 10
+        player.ships.cruiser.pegs[3] = selectedNode + 20
       } else if (selectedNode === firstNode - 10) {
-        player.ships.cruiser.pegs[2] = selectedNode - 20
-        player.ships.cruiser.pegs[3] = selectedNode - 30
+        player.ships.cruiser.pegs[2] = selectedNode - 10
+        player.ships.cruiser.pegs[3] = selectedNode - 20
       } else if (selectedNode === firstNode + 1) {
         player.ships.cruiser.pegs[2] = selectedNode + 2
         player.ships.cruiser.pegs[3] = selectedNode + 3
@@ -326,6 +325,15 @@ function placeShip(e) {
       console.log(player.ships.sub.pegs)
       console.log(player.ships.cruiser.pegs)
       console.log(player.ships.battleship.pegs)
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
+      cpuGuess()
       cpuGuess()
       cpuGuess()
       cpuGuess()
@@ -571,27 +579,27 @@ function playerGuess(e) {
 // shipSunk --> check for isSunk for ship
 function checkSunk(guess) {
   if (player.ships.battleship.pegs.includes(guess)) {
-    if (player.ships.battleship.pegs.every(node => node === null)) {
+    if (player.ships.battleship.pegs.every(node => gameBoard[node] === null)) {
       Guess.prevHits = []
       player.ships.battleship.isSunk = true
       return true
     } else return false
   } else if (player.ships.cruiser.pegs.includes(guess)) {
-    if (player.ships.cruiser.pegs.every(node => node === null)) {
+    if (player.ships.cruiser.pegs.every(node => gameBoard[node] === null)) {
       Guess.prevHits = []
       player.ships.cruiser.isSunk = true
       return true
     } else return false
 
   } else if (player.ships.sub.pegs.includes(guess)) {
-    if (player.ships.sub.pegs.every(node => node === null)) {
+    if (player.ships.sub.pegs.every(node => gameBoard[node] === null)) {
       Guess.prevHits = []
       player.ships.sub.isSunk = true
       return true
     } else return false
 
   } else if (player.ships.destroyer.pegs.includes(guess)) {
-    if (player.ships.destroyer.pegs.every(node => node === null)) {
+    if (player.ships.destroyer.pegs.every(node => gameBoard[node] === null)) {
       Guess.prevHits = []
       player.ships.destroyer.isSunk = true
       return true
@@ -647,13 +655,11 @@ function cpuGuess() {
           boundVerticalPos(guess)
           if (checkHit(guess)) {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
-            Guess.prevDirection.hit = true
-            checkSunk(guess)
             Guess.cpuGuesses.push(guess)
             Guess.prevHits.push(guess)
+            checkSunk(guess)
           } else {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
-            Guess.prevDirection.hit = false
             Guess.cpuGuesses.push(guess)
 
           }
@@ -664,13 +670,11 @@ function cpuGuess() {
           boundHorizontalPos(guess)
           if (checkHit(guess)) {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
-            Guess.prevDirection.hit = true
-            checkSunk(guess)
             Guess.cpuGuesses.push(guess)
             Guess.prevHits.push(guess)
+            checkSunk(guess)
           } else {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
-            Guess.prevDirection.hit = false
             Guess.cpuGuesses.push(guess)
           }
 
@@ -680,14 +684,12 @@ function cpuGuess() {
           boundVerticalPos(guess)
           if (checkHit(guess)) {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
-            Guess.prevDirection.hit = true
-            checkSunk(guess)
             Guess.cpuGuesses.push(guess)
             Guess.prevHits.push(guess)
+            checkSunk(guess)
             // IF GUESS IS IN cpuGUESSES THEN GO TO OTHER VERT POSITION
           } else {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
-            Guess.prevDirection.hit = false
             Guess.cpuGuesses.push(guess)
           }
 
@@ -698,13 +700,11 @@ function cpuGuess() {
           //check sunk if sunk clear prevHits
           if (checkHit(guess)) {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
-            Guess.prevDirection.hit = true
-            checkSunk(guess)
             Guess.cpuGuesses.push(guess)
             Guess.prevHits.push(guess)
+            checkSunk(guess)
           } else {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
-            Guess.prevDirection.hit = false
             Guess.cpuGuesses.push(guess)
           }
 
@@ -722,13 +722,11 @@ function cpuGuess() {
           boundVerticalPos(guess)
           if (checkHit(guess)) {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
-            Guess.prevDirection.hit = true
-            checkSunk(guess)
             Guess.cpuGuesses.push(guess)
             Guess.prevHits.push(guess)
+            checkSunk(guess)
           } else {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
-            Guess.prevDirection.hit = false
             Guess.cpuGuesses.push(guess)
           }
 
@@ -742,13 +740,11 @@ function cpuGuess() {
           boundVerticalPos(guess)
           if (checkHit(guess)) {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
-            Guess.prevDirection.hit = true
-            checkSunk(guess)
             Guess.cpuGuesses.push(guess)
             Guess.prevHits.push(guess)
+            checkSunk(guess)
           } else {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
-            Guess.prevDirection.hit = false
             Guess.cpuGuesses.push(guess)
           }
 
@@ -764,13 +760,11 @@ function cpuGuess() {
           boundHorizontalPos(guess)
           if (checkHit(guess)) {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
-            Guess.prevDirection.hit = true
-            checkSunk(guess)
-            Guess.cpuGuesses.push(guess)
             Guess.prevHits.push(guess)
+            Guess.cpuGuesses.push(guess)
+            checkSunk(guess)
           } else {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
-            Guess.prevDirection.hit = false
             Guess.cpuGuesses.push(guess)
           }
 
@@ -784,13 +778,11 @@ function cpuGuess() {
           boundHorizontalPos(guess)
           if (checkHit(guess)) {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
-            Guess.prevDirection.hit = true
-            checkSunk(guess)
             Guess.cpuGuesses.push(guess)
             Guess.prevHits.push(guess)
+            checkSunk(guess)
           } else {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
-            Guess.prevDirection.hit = false
             Guess.cpuGuesses.push(guess)
           }
 
@@ -798,9 +790,13 @@ function cpuGuess() {
       }
     }
   } while (hasGuessed(guess) && !isBound) // && isBound)
-  console.log(guess)
+  Guess.prevHits.forEach(hit => console.log(hit));
+  console.log(player.ships.battleship.isSunk)
+  console.log(player.ships.cruiser.isSunk)
+  console.log(player.ships.sub.isSunk)
+  console.log(player.ships.destroyer.isSunk)
   console.log(Guess)
-  console.log(isBound)
+
 
 }
 
@@ -841,9 +837,11 @@ function applyHit(guess) {
   if (currentTurn === 'user') {
     console.log(`User hit node ${guess}`)
     computerBoard[guess - 1] = null // Will eventually apply visual effect and sound to this position 
+    
     playerWinCount += 1
   } else if (currentTurn === 'cpu') {
     console.log(`Cpu hit node ${guess}`)
+    
     gameBoard[guess - 1] = null // Will eventually apply visual effect and sound to this position 
     cpuWinCount += 1
   }
