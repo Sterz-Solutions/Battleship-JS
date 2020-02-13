@@ -5,48 +5,98 @@
   ".player-info" ".board";
 } */
 
-.ships {
-  border: dotted green;
-  margin-top: 4rem;
+h1 {
+  display: grid;
+  text-align: center;
+  padding-left: 25rem;
+  padding-right: 25rem;
+  
+}
+
+#ships {
+  /* display: flex; */
+  /* border: dotted green; */
+  margin-top: 2.5rem;
+  justify-content: center;
+  text-align: center;
 
 }
 
 .ship-button {
   /* display: flex; */
+  /* margin-top: 1rem; */
+  padding-left: 3rem;
+  padding-right: 3rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  font-size: 1rem;
+  /* margin: auto; */
   align-content: center;
   justify-content: center;
-  margin-left: 8rem;
+}
+
+#board-container {
+  display: grid;
+  position: relative;
+  justify-items: center;
+  justify-content: center;
+  margin-left: 15rem;
+}
+
+#play-button {
+  margin-top: 1.5rem;
+  border: solid green;
+  font-size: 18px;
 }
 
 .board {
   display: grid;
+  /* display: none; */
+  justify-content: center;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-  margin-left: 20rem;
-  width: 40%;
+  width: 50rem;
+  margin: auto;
   height: 40%;
+  position: absolute;
   color: white;
-  position: relative;
+  cursor: pointer;
+  top: 0;
+  left: 0;
 }
-  .cpu {
+  
+.cpu {
     display: grid;
+    justify-content: center;
+    /* display: none; */
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    width: 40%;
+    width: 50rem;
+    margin: auto;
     height: 40%;
-    margin-left: .05rem;
-    margin-right: 10rem;
     position: absolute;
+    top: 0;
+    left: 0;
     color: white;
     cursor: pointer;
     /* opacity: 0%; */
-  }
+}
+
+#swap-turn {
+  text-align: center;
+  align-content: center;
+  justify-content: center;
+  margin-top: 27rem;
+  margin-right: 15rem;
+  font-size: 20px;
+}
 
 .node {
-  padding: .3rem;
-  border-radius: 50%;
-  margin-top: 1.5rem;
-  margin-left: 1.5rem;
-  width: 50%;
-  background-color: blue;
+  padding: .5rem;
+  /* border-radius: 50%; */
+  text-align: center;
+  margin: .1rem;
+  /* margin-left: .5rem; */
+  /* width: 50%; */
+  background-color: lightseagreen;
   }
