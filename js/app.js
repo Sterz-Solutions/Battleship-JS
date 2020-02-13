@@ -647,6 +647,8 @@ function checkSunk(guess) {
 
       Guess.prevHits = []
       player.ships.battleship.isSunk = true
+      console.log("Ship 5 has been sunk")
+
       return true
     } else return false
   } else if (player.ships.cruiser.pegs.includes(guess)) {
@@ -655,6 +657,8 @@ function checkSunk(guess) {
 
       Guess.prevHits = []
       player.ships.cruiser.isSunk = true
+      console.log("Ship 4 has been sunk")
+
       return true
     } else return false
 
@@ -664,6 +668,8 @@ function checkSunk(guess) {
 
       Guess.prevHits = []
       player.ships.sub.isSunk = true
+      console.log("Ship 3 has been sunk")
+
       return true
     } else return false
 
@@ -673,6 +679,8 @@ function checkSunk(guess) {
 
       Guess.prevHits = []
       player.ships.destroyer.isSunk = true
+      console.log("Ship 2 has been sunk")
+
       return true
     } else return false
 
@@ -778,17 +786,20 @@ function cpuGuess() {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
             Guess.cpuGuesses.push(guess)
           }
-
           break
       }
     } else if (Guess.prevHits.length > 1) {
-      if (Guess.prevDirection.direction === 1 || Guess.prevDirection.direction === 3) { // We know its Vertical
+      if (Guess.prevDirection.direction === 1 || Guess.prevDirection.direction === 3) { // We know its Vertical ----------------------------------------------------
+        console.log("entered the 1st LOOP for with a guess of " + guess + " And a direction of " + Guess.prevDirection.direction)
+
         vertGuess = getRandomIntInclusive(1, 2)
         if (vertGuess === 1) { // GUESS UP WITHIN BOUNDS AND NOT IN CPUGUESSES
           // if (Guess.prevHits[0] > Guess.prevHits[Guess.prevHits.length - 1]) {
-            guess = Math.min(...Guess.prevHits) - 10
+          guess = Math.min(...Guess.prevHits) - 10
+          console.log("In VertGuess = 1 --- Guess has just been set to: ", guess)
+
           // } else {
-            // guess = Guess.prevHits[0] - 10
+          // guess = Guess.prevHits[0] - 10
           // }
           boundVerticalPos(guess)
           if (checkHit(guess)) {
@@ -802,7 +813,9 @@ function cpuGuess() {
           }
 
         } else if (vertGuess === 2) { // GUESS DOWN WITHIN BOUNDS AND NOT IN CPUGUESSES
-            guess = Math.max(...Guess.prevHits) + 10
+          guess = Math.max(...Guess.prevHits) + 10
+          console.log("In VertGuess = 2 --- Guess has just been set to: ", guess)
+
           boundVerticalPos(guess)
           if (checkHit(guess)) {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
@@ -813,16 +826,20 @@ function cpuGuess() {
             Guess.cpuGuesses.push(guess)
           }
 
-        } else if (!checkSunk(guess) && (gameBoard[guess - 1] === 'sunk') ) {
+        } else if (gameBoard[guess - 1] === -1) {
           (Guess.prevDirection.direction === 1 || Guess.prevDirection.direction === 3) ? Guess.prevDirection.direction = Guess.prevDirection.direction + 1 : Guess.prevDirection.direction = Guess.prevDirection.direction - 1
-          for(let i = 0; i < Guess.prevHits.length - 1; i++) {
+          for (let i = 0; i < Guess.prevHits.length - 1; i++) {
             Guess.prevHits.pop()
           }
+          console.log("Direction swap test VERT 1: AT Guess: " + guess + " With a new direction of " + Guess.prevDirection.direction)
         }
-      } else { // We know its horizontal 
+      } else if (Guess.prevDirection.direction === 2 || Guess.prevDirection.direction === 4) { // We know its horizontal ------------------------------------------
+        console.log("entered the 2nd LOOP for with a guess of " + guess + " And a direction of " + Guess.prevDirection.direction)
         horizGuess = getRandomIntInclusive(1, 2)
         if (horizGuess === 1) { // GUESS RIGHT WITHIN BOUNDS AND NOT IN CPU GUESSES
-            guess = Math.max(...Guess.prevHits) + 1
+          guess = Math.max(...Guess.prevHits) + 1
+          console.log("In horizGuess = 1 --- Guess has just been set to: ", guess)
+
           boundHorizontalPos(guess)
           if (checkHit(guess)) {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
@@ -834,7 +851,9 @@ function cpuGuess() {
           }
 
         } else if (horizGuess === 2) {  // GUESS LEFT WITHIN BOUNDS AND NOT IN CPU GUESSES
-            guess = Math.min(...Guess.prevHits) - 1
+          guess = Math.min(...Guess.prevHits) - 1
+          console.log("In horizGuess = 2 --- Guess has just been set to: ", guess)
+
           boundHorizontalPos(guess)
           if (checkHit(guess)) {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
@@ -843,53 +862,66 @@ function cpuGuess() {
           } else {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
             Guess.cpuGuesses.push(guess)
-            if (!checkHit((Math.min(...Guess.prevHits) - 1)) && !checkHit((Math.min(...Guess.prevHits) + 1) || gameBoard[guess] === -1) ) {
+            if (!checkHit((Math.min(...Guess.prevHits) - 1)) && !checkHit((Math.min(...Guess.prevHits) + 1) || gameBoard[guess - 1] === -1)) {
               (Guess.prevDirection.direction === 1 || Guess.prevDirection.direction === 3) ? Guess.prevDirection.direction = Guess.prevDirection.direction + 1 : Guess.prevDirection.direction = Guess.prevDirection.direction - 1
-              for(let i = 0; i < Guess.prevHits.length - 1; i++) {
+              for (let i = 0; i < Guess.prevHits.length - 1; i++) {
                 Guess.prevHits.pop()
               }
+
+              console.log(" Direction swap test HORIZ 2: AT Guess: " + guess + " With a new direction of " + Guess.prevDirection.direction)
             }
           }
 
-        // } else if (!checkHit((Math.min(...Guess.prevHits) - 1)) && !checkHit((Math.min(...Guess.prevHits) + 1) || gameBoard[guess] === 'sunk') ) {
+          // } else if (!checkHit((Math.min(...Guess.prevHits) - 1)) && !checkHit((Math.min(...Guess.prevHits) + 1) || gameBoard[guess] === 'sunk') ) {
           // (Guess.prevDirection.direction === 1 || Guess.prevDirection.direction === 3) ? Guess.prevDirection.direction = Guess.prevDirection.direction + 1 : Guess.prevDirection.direction = Guess.prevDirection.direction - 1
           // for(let i = 0; i < Guess.prevHits.length - 1; i++) {
-            // Guess.prevHits.pop()
+          // Guess.prevHits.pop()
           // }
-        } else if (!checkSunk(guess) && (gameBoard[guess - 1] === 'sunk')) {
+        } else if ((gameBoard[guess - 1] === -1)) {
           (Guess.prevDirection.direction === 1 || Guess.prevDirection.direction === 3) ? Guess.prevDirection.direction = Guess.prevDirection.direction + 1 : Guess.prevDirection.direction = Guess.prevDirection.direction - 1
-          for(let i = 0; i < Guess.prevHits.length - 1; i++) {
+          for (let i = 0; i < Guess.prevHits.length - 1; i++) {
             Guess.prevHits.pop()
           }
+          console.log(" Direction swap test withing loop HORIZ 2: AT Guess: " + guess + " With a new direction of " + Guess.prevDirection.direction)
+
         }
       }
-    } else if (gameBoard[guess - 1] === -1 ) {
+    } else if (gameBoard[guess - 1] === -1) { //-----------------------------------------------------------------------
+      console.log("entered the 3rd LOOP for gameBoard[guess - 1] = -1")
       if (Guess.prevDirection.direction === 1) {
         guess = guess - 10
-        if(checkHit(guess)) {
-        Guess.cpuGuesses.push(guess)
-        checkSunk(guess)
+        console.log("In 3rd LOOP direction = 1 --- Guess has just been set to: ", guess)
+
+        if (checkHit(guess)) {
+          Guess.cpuGuesses.push(guess)
+          checkSunk(guess)
         }
       } else if (Guess.prevDirection.direction === 3) {
         guess = guess + 10
-        if(checkHit(guess)) {
-        // Guess.prevHits.push(guess)
-        Guess.cpuGuesses.push(guess)
-        checkSunk(guess)
+        console.log("In 3rd LOOP direction = 3 --- Guess has just been set to: ", guess)
+
+        if (checkHit(guess)) {
+          // Guess.prevHits.push(guess)
+          Guess.cpuGuesses.push(guess)
+          checkSunk(guess)
         }
       } else if (Guess.prevDirection.direction === 2) {
         guess = guess + 1
-        if(checkHit(guess)) {
-        // Guess.prevHits.push(guess)
-        Guess.cpuGuesses.push(guess)
-        checkSunk(guess)
+        console.log("In 3rd LOOP direction = 2 --- Guess has just been set to: ", guess)
+
+        if (checkHit(guess)) {
+          // Guess.prevHits.push(guess)
+          Guess.cpuGuesses.push(guess)
+          checkSunk(guess)
         }
       } else if (Guess.prevDirection.direction === 4) {
         guess = guess - 1
-        if(checkHit(guess)) {
-        // Guess.prevHits.push(guess)
-        Guess.cpuGuesses.push(guess)
-        checkSunk(guess)
+        console.log("In 3rd LOOP direction = 4 --- Guess has just been set to: ", guess)
+
+        if (checkHit(guess)) {
+          // Guess.prevHits.push(guess)
+          Guess.cpuGuesses.push(guess)
+          checkSunk(guess)
         }
       }
     }
@@ -911,7 +943,7 @@ function cpuGuess() {
 //--------------------------------------------------------------------------------------------------------------------------------------
 // hasGuessed
 function hasGuessed(guess) {
-  if(Guess.cpuGuesses.includes(guess)) {
+  if (Guess.cpuGuesses.includes(guess)) {
     return true
   } else return false
 }
@@ -934,7 +966,7 @@ function checkHit(guess) {
       applyHit(guess)
       return true
     } else if (gameBoard[guess - 1] === -1) {
-
+      // ------------------
     } else if (!gameBoard.includes(guess)) {
       applyMiss(guess)
       return false
@@ -953,9 +985,9 @@ function applyHit(guess) {
     console.log(`Cpu hit node ${guess}`)
     Guess.prevHits.push(guess)
     console.log("GUESS PREVIOUS HITS ", Guess.prevHits)
-    console.log(gameBoard[guess - 1])
+    console.log("Value to be changed to -1: ", gameBoard[guess - 1])
     gameBoard[guess - 1] = -1 // Will eventually apply visual effect and sound to this position 
-    console.log(gameBoard[guess - 1])
+    console.log("Value is now: ", gameBoard[guess - 1])
     cpuWinCount += 1
   }
 }
