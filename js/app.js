@@ -170,7 +170,7 @@ function boundVerticalNeg(nodeToCheck) {
 
 // Vertical bounds check for positive numbers
 function boundVerticalPos(nodeToCheck) {
-  if (nodeToCheck < 100 && nodeToCheck > 1) isBound = true
+  if (nodeToCheck <= 100 && nodeToCheck >= 1) isBound = true
   else isBound = false
 }
 
@@ -325,55 +325,6 @@ function placeShip(e) {
       console.log(player.ships.sub.pegs)
       console.log(player.ships.cruiser.pegs)
       console.log(player.ships.battleship.pegs)
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
-      cpuGuess()
       cpuGuess()
       cpuGuess()
       cpuGuess()
@@ -851,23 +802,18 @@ function cpuGuess() {
           }
 
         } else if (vertGuess === 2) { // GUESS DOWN WITHIN BOUNDS AND NOT IN CPUGUESSES
-          // if (Guess.prevHits[0] < Guess.prevHits[Guess.prevHits.length - 1]) {
             guess = Math.max(...Guess.prevHits) + 10
-          // } else {
-            // guess = Guess.prevHits[0] + 10
-          // }
           boundVerticalPos(guess)
           if (checkHit(guess)) {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
             Guess.cpuGuesses.push(guess)
-            // Guess.prevHits.push(guess)
             checkSunk(guess)
           } else {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
             Guess.cpuGuesses.push(guess)
           }
 
-        } else if (!checkSunk(guess) && isNaN(gameBoard[guess - 1])) {
+        } else if (!checkSunk(guess) && (gameBoard[guess - 1] === 'sunk') ) {
           (Guess.prevDirection.direction === 1 || Guess.prevDirection.direction === 3) ? Guess.prevDirection.direction = Guess.prevDirection.direction + 1 : Guess.prevDirection.direction = Guess.prevDirection.direction - 1
           for(let i = 0; i < Guess.prevHits.length - 1; i++) {
             Guess.prevHits.pop()
@@ -876,15 +822,10 @@ function cpuGuess() {
       } else { // We know its horizontal 
         horizGuess = getRandomIntInclusive(1, 2)
         if (horizGuess === 1) { // GUESS RIGHT WITHIN BOUNDS AND NOT IN CPU GUESSES
-          // if (Math.min(...Guess.prevHits) < Math.max(Guess.prevHits)) {
-            guess = Math.max(Guess.prevHits) + 1
-          // } else {
-            // guess = Math.min(Guess.prevHits) + 1
-          // }
+            guess = Math.max(...Guess.prevHits) + 1
           boundHorizontalPos(guess)
           if (checkHit(guess)) {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
-            // Guess.prevHits.push(guess)
             Guess.cpuGuesses.push(guess)
             checkSunk(guess)
           } else {
@@ -893,38 +834,39 @@ function cpuGuess() {
           }
 
         } else if (horizGuess === 2) {  // GUESS LEFT WITHIN BOUNDS AND NOT IN CPU GUESSES
-          // if (Guess.prevHits[0] > Guess.prevHits[Guess.prevHits.length - 1]) {
             guess = Math.min(...Guess.prevHits) - 1
-          // } else {
-            // guess = Guess.prevHits[0] - 1
-          // }
           boundHorizontalPos(guess)
           if (checkHit(guess)) {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
             Guess.cpuGuesses.push(guess)
-            // Guess.prevHits.push(guess)
             checkSunk(guess)
           } else {
             Guess.prevDirection.direction = Guess.cpuGuessDirection
             Guess.cpuGuesses.push(guess)
+            if (!checkHit((Math.min(...Guess.prevHits) - 1)) && !checkHit((Math.min(...Guess.prevHits) + 1) || gameBoard[guess] === -1) ) {
+              (Guess.prevDirection.direction === 1 || Guess.prevDirection.direction === 3) ? Guess.prevDirection.direction = Guess.prevDirection.direction + 1 : Guess.prevDirection.direction = Guess.prevDirection.direction - 1
+              for(let i = 0; i < Guess.prevHits.length - 1; i++) {
+                Guess.prevHits.pop()
+              }
+            }
           }
 
-        } else if (!checkSunk(guess) && isNaN(gameBoard[guess - 1])) {
+        // } else if (!checkHit((Math.min(...Guess.prevHits) - 1)) && !checkHit((Math.min(...Guess.prevHits) + 1) || gameBoard[guess] === 'sunk') ) {
+          // (Guess.prevDirection.direction === 1 || Guess.prevDirection.direction === 3) ? Guess.prevDirection.direction = Guess.prevDirection.direction + 1 : Guess.prevDirection.direction = Guess.prevDirection.direction - 1
+          // for(let i = 0; i < Guess.prevHits.length - 1; i++) {
+            // Guess.prevHits.pop()
+          // }
+        } else if (!checkSunk(guess) && (gameBoard[guess - 1] === 'sunk')) {
           (Guess.prevDirection.direction === 1 || Guess.prevDirection.direction === 3) ? Guess.prevDirection.direction = Guess.prevDirection.direction + 1 : Guess.prevDirection.direction = Guess.prevDirection.direction - 1
           for(let i = 0; i < Guess.prevHits.length - 1; i++) {
             Guess.prevHits.pop()
           }
         }
       }
-      // if (!checkSunk(guess) && !checkHit(guess) ) {
-      //   (Guess.prevDirection.direction === 1 || Guess.prevDirection.direction === 3) ? guess.prevDirection.direction + 1 : guess.prevDirection.direction - 1
-
-      // }
     } else if (gameBoard[guess - 1] === -1 ) {
       if (Guess.prevDirection.direction === 1) {
         guess = guess - 10
         if(checkHit(guess)) {
-        // Guess.prevHits.push(guess)
         Guess.cpuGuesses.push(guess)
         checkSunk(guess)
         }
@@ -953,8 +895,8 @@ function cpuGuess() {
     }
 
 
-  } while (hasGuessed(guess) && !isBound) // && isBound)
-  Guess.prevHits.forEach(hit => console.log(hit));
+  } while (hasGuessed(guess) && !isBound)
+  Guess.prevHits.forEach(hit => console.log(hit))
   console.log(player.ships.battleship.isSunk)
   console.log(player.ships.cruiser.isSunk)
   console.log(player.ships.sub.isSunk)
@@ -969,7 +911,9 @@ function cpuGuess() {
 //--------------------------------------------------------------------------------------------------------------------------------------
 // hasGuessed
 function hasGuessed(guess) {
-  return Guess.cpuGuesses.includes(guess) ? true : false
+  if(Guess.cpuGuesses.includes(guess)) {
+    return true
+  } else return false
 }
 
 
@@ -989,6 +933,8 @@ function checkHit(guess) {
     if (gameBoard.includes(guess)) {
       applyHit(guess)
       return true
+    } else if (gameBoard[guess - 1] === -1) {
+
     } else if (!gameBoard.includes(guess)) {
       applyMiss(guess)
       return false
