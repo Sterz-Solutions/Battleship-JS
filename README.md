@@ -9,13 +9,13 @@ The game boards will be built dynamically and be re-rendered to the screen depen
 
 Here are some screenshots of different post hit/miss/win/loss views!
 
-![picture](/img/UserPlacement.png)
+![picture](/images/UserPlacement.png)
 
-![picture](/img/UserMiss.png)
+![picture](/images/UserMiss.png)
 
-![picture](/img/CpuHit.png)
+![picture](/images/CpuHit.png)
 
-![picture](/img/CpuWin.png)
+![picture](/images/CpuWin.png)
 
 
 
