@@ -1,9 +1,3 @@
-/* body {
-  display: grid;
-  grid-template-areas: 
-  ".cpu" ".cpu-info"
-  ".player-info" ".board";
-} */
 
 h1 {
   display: grid;
@@ -14,8 +8,6 @@ h1 {
 }
 
 #ships {
-  /* display: flex; */
-  /* border: dotted green; */
   margin-top: 2.5rem;
   justify-content: center;
   text-align: center;
@@ -23,14 +15,11 @@ h1 {
 }
 
 .ship-button {
-  /* display: flex; */
-  /* margin-top: 1rem; */
   padding-left: 3rem;
   padding-right: 3rem;
   margin-left: 1rem;
   margin-right: 1rem;
   font-size: 1rem;
-  /* margin: auto; */
   align-content: center;
   justify-content: center;
 }
@@ -51,7 +40,6 @@ h1 {
 
 .board {
   display: grid;
-  /* display: none; */
   justify-content: center;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
@@ -66,7 +54,6 @@ h1 {
 }
   
 .cpu {
-    /* display: grid; */
     justify-content: center;
     display: none;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
@@ -79,7 +66,6 @@ h1 {
     left: 0;
     color: white;
     cursor: pointer;
-    /* opacity: 0%; */
 }
 
 #swap-turn {
@@ -93,11 +79,8 @@ h1 {
 
 .node {
   padding: .5rem;
-  /* border-radius: 50%; */
   text-align: center;
   border: 1px solid black;
   margin: .1rem;
-  /* margin-left: .5rem; */
-  /* width: 50%; */
   background-color: lightseagreen;
   }
