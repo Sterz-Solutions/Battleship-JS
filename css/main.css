@@ -66,9 +66,9 @@ h1 {
 }
   
 .cpu {
-    display: grid;
+    /* display: grid; */
     justify-content: center;
-    /* display: none; */
+    display: none;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     width: 50rem;

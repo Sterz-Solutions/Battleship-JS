@@ -122,7 +122,11 @@ function playGame(e) {
   document.getElementById('cruiser').disabled = true
   document.getElementById('sub').disabled = true
   document.getElementById('destroyer').disabled = true
-  createBoard()
+  appendChildren(cpuBoard, cpuNodes)
+  cpuPlace(5)
+  cpuPlace(4)
+  cpuPlace(3)
+  cpuPlace(2)
 }
 
 //--------------------------------------------------------------------------------------------
@@ -138,8 +142,8 @@ function createBoard() {
     curNode = i
     cpuNodes.push(addNode(curNode))
   }
-  appendChildren(cpuBoard, cpuNodes)
-  appendChildren(playerBoard, playerNodes)
+  // appendChildren(cpuBoard, cpuNodes)
+  // appendChildren(playerBoard, playerNodes)
   // appendChildren(gameBoard, playerNodes)
   // appendChildren(cpuBoard, cpuNodes)
 }
@@ -256,7 +260,7 @@ function placeShip(e) {
   if (shipLength === 5) {
     if (player.ships.battleship.pegs.every(node => node === null)) {
       player.ships.battleship.pegs[0] = selectedNode
-      e.target.style = 'background-color: red'
+      e.target.style = 'background-color: orchid'
       firstNode = selectedNode
 
       userPrompt.innerHTML = 'Select an adjacent space left, right, up, or down to place your Battleship in selected direction'
@@ -265,43 +269,43 @@ function placeShip(e) {
       userPrompt.innerHTML = 'Not a valid selection'
     } else if (selectedNode === selectedNode + 10 || selectedNode - 10 || selectedNode + 1 || selectedNode - 1) {
       player.ships.battleship.pegs[1] = selectedNode
-      e.target.style = 'background-color: red'
+      e.target.style = 'background-color: orchid'
 
       // document.querySelector('#foo\\:bar');  // Match the second div
       // <div id="foo:bar"></div>
 
       if (selectedNode === firstNode + 10) {
         player.ships.battleship.pegs[2] = selectedNode + 10
-        document.getElementById(selectedNode + 10).style = 'background-color: red'
+        document.getElementById(selectedNode + 10).style = 'background-color: orchid'
         player.ships.battleship.pegs[3] = selectedNode + 20
-        document.getElementById(selectedNode + 20).style = 'background-color: red'
+        document.getElementById(selectedNode + 20).style = 'background-color: orchid'
         player.ships.battleship.pegs[4] = selectedNode + 30
-        document.getElementById(selectedNode + 30).style = 'background-color: red'
+        document.getElementById(selectedNode + 30).style = 'background-color: orchid'
 
       } else if (selectedNode === firstNode - 10) {
         player.ships.battleship.pegs[2] = selectedNode - 10
-        document.getElementById(selectedNode - 10).style = 'background-color: red'
+        document.getElementById(selectedNode - 10).style = 'background-color: orchid'
         player.ships.battleship.pegs[3] = selectedNode - 20
-        document.getElementById(selectedNode - 20).style = 'background-color: red'
+        document.getElementById(selectedNode - 20).style = 'background-color: orchid'
         player.ships.battleship.pegs[4] = selectedNode - 30
-        document.getElementById(selectedNode - 30).style = 'background-color: red'
+        document.getElementById(selectedNode - 30).style = 'background-color: orchid'
 
 
       } else if (selectedNode === firstNode + 1) {
         player.ships.battleship.pegs[2] = selectedNode + 1
-        document.getElementById(selectedNode + 1).style = 'background-color: red'
+        document.getElementById(selectedNode + 1).style = 'background-color: orchid'
         player.ships.battleship.pegs[3] = selectedNode + 2
-        document.getElementById(selectedNode + 2).style = 'background-color: red'
+        document.getElementById(selectedNode + 2).style = 'background-color: orchid'
         player.ships.battleship.pegs[4] = selectedNode + 3
-        document.getElementById(selectedNode + 3).style = 'background-color: red'
+        document.getElementById(selectedNode + 3).style = 'background-color: orchid'
 
       } else if (selectedNode === firstNode - 1) {
         player.ships.battleship.pegs[2] = selectedNode - 1
-        document.getElementById(selectedNode - 1).style = 'background-color: red'
+        document.getElementById(selectedNode - 1).style = 'background-color: orchid'
         player.ships.battleship.pegs[3] = selectedNode - 2
-        document.getElementById(selectedNode - 2).style = 'background-color: red'
+        document.getElementById(selectedNode - 2).style = 'background-color: orchid'
         player.ships.battleship.pegs[4] = selectedNode - 3
-        document.getElementById(selectedNode - 3).style = 'background-color: red'
+        document.getElementById(selectedNode - 3).style = 'background-color: orchid'
 
       }
       player.ships.battleship.pegs.forEach(function (node) {
@@ -348,7 +352,7 @@ function placeShip(e) {
       }
       player.ships.cruiser.pegs.forEach(function (node) {
         gameBoard[node - 1] = node;
-      })     
+      })
       userPrompt.innerHTML = 'Select Next Ship To Place'
       console.log(player.ships.cruiser.pegs)
     }
@@ -387,7 +391,7 @@ function placeShip(e) {
       console.log(player.ships.sub.pegs)
       userPrompt.innerHTML = 'Select Next Ship To Place'
     }
-  
+
   } else if (shipLength === 2) {
     if (player.ships.destroyer.pegs.every(node => node === null)) {
       player.ships.destroyer.pegs[0] = selectedNode
@@ -433,13 +437,12 @@ function cpuPlace(ship) {
   let check = 0
   let cpuFirst = 0
   let direction = 0
-  // cpuFirst = getRandomIntInclusive(1, 100)
-  // cpu.ships.ship[0] = cpuFirst
   if (ship === 5) {
     do {
       direction = 0
       cpuFirst = getRandomIntInclusive(-1, -100)
       cpu.ships.battleship[0] = cpuFirst
+      document.getElementById(cpuFirst).style = 'background-color: orchid'
       // pick a direction of placement randomly
       // 1 = up   2 = right   3 = down    4 = left
       direction = getRandomIntInclusive(1, 4)
@@ -449,6 +452,7 @@ function cpuPlace(ship) {
           cpu.ships.battleship[2] = cpuFirst - 20
           cpu.ships.battleship[3] = cpuFirst - 30
           cpu.ships.battleship[4] = cpuFirst - 40
+
           cpu.ships.battleship.every(boundVerticalNeg) ? isBound = true : isBound = false
           break
         case 2:
@@ -691,7 +695,7 @@ function cpuGuess() {
         Guess.cpuGuesses.push(guess)
       } else Guess.cpuGuesses.push(guess)
     } else if (Guess.prevHits.length === 1) {
-      do{
+      do {
         Guess.cpuGuessDirection = getRandomIntInclusive(1, 4)
         guess = Guess.prevHits[0]
         switch (Guess.cpuGuessDirection) {
@@ -750,12 +754,12 @@ function cpuGuess() {
         }
         if (gameBoard[guess - 1] === -10) {
           // while (gameBoard[guess - 1] === -10 && gameBoard[guess - 1] !== 'sunk') {
-            guessInDirection(Guess.prevDirection.direction)
-            checkSunk(guess)
-            // console.log(guess, "IS GUESS and position is ", gameBoard[guess - 1])
+          guessInDirection(Guess.prevDirection.direction)
+          checkSunk(guess)
+          // console.log(guess, "IS GUESS and position is ", gameBoard[guess - 1])
           // }
         }
-       } while(gameBoard[guess - 1] !== 'sunk')
+      } while (gameBoard[guess - 1] !== 'sunk')
     } else if (Guess.prevHits.length > 1) {
       if (Guess.prevDirection.direction === 1 || Guess.prevDirection.direction === 3) { // We know its Vertical ----------------------------------------------------
         console.log("entered the VERT LOOP for with a guess of " + guess + " And a direction of " + Guess.prevDirection.direction)
@@ -794,11 +798,7 @@ function cpuGuess() {
 
         } else if (!checkHit((Math.min(...Guess.prevHits) - 10)) && !checkHit((Math.min(...Guess.prevHits) + 10) || gameBoard[guess - 1] === -10)) {
           (Guess.prevDirection.direction === 1 || Guess.prevDirection.direction === 3) ? Guess.prevDirection.direction = Guess.prevDirection.direction + 1 : Guess.prevDirection.direction = Guess.prevDirection.direction - 1
-          // for (let i = 0; i < Guess.prevHits.length - 1; i++) {
-          //   Guess.prevHits.pop()
-          //   console.log('POP post vertGuess 1/2')
 
-          // }
           console.log("Direction swap test VERT 1: AT Guess: " + guess + " With a new direction of " + Guess.prevDirection.direction)
         }
       } else if (Guess.prevDirection.direction === 2 || Guess.prevDirection.direction === 4) { // We know its horizontal ------------------------------------------
@@ -829,12 +829,6 @@ function cpuGuess() {
             }
             if (!checkHit((Math.min(...Guess.prevHits) - 1)) && !checkHit((Math.min(...Guess.prevHits) + 1) || gameBoard[guess - 1] === -10)) {
               directionSwap(Guess.prevDirection.direction)
-              // (Guess.prevDirection.direction === 1 || Guess.prevDirection.direction === 3) ? Guess.prevDirection.direction = Guess.prevDirection.direction + 1 : Guess.prevDirection.direction = Guess.prevDirection.direction - 1
-              // for (let i = 0; i < Guess.prevHits.length - 1; i++) {
-              //   Guess.prevHits.pop()
-              //   console.log('POP horiz 2')
-
-              // }
               guess = Guess.prevHits[0]
               console.log("In horizGuess = 2 DOUBLE GUESS --- Guess has just been set to: ", guess)
               verticalGuess(Guess.prevDirection.direction, guess)
@@ -842,15 +836,6 @@ function cpuGuess() {
             }
           } console.log(guess, " is OUT of horiz bound")
         }
-        // else if ((gameBoard[guess - 1] === -1)) {
-        // (Guess.prevDirection.direction === 1 || Guess.prevDirection.direction === 3) ? Guess.prevDirection.direction = Guess.prevDirection.direction + 1 : Guess.prevDirection.direction = Guess.prevDirection.direction - 1
-        // for (let i = 0; i < Guess.prevHits.length - 1; i++) {
-        //   Guess.prevHits.pop()
-        //   console.log('POP post horiz 2 (gameBoard[guess - 1] = -1')
-        // }
-        //   console.log(" Direction swap test withing loop HORIZ: AT Guess: " + guess + " With a new direction of " + Guess.prevDirection.direction)
-
-        // }
       }
     } else if (gameBoard[guess - 1] === -1) { //-----------------------------------------------------------------------
       console.log("entered the 3rd LOOP for gameBoard[guess - 1] = -10")
@@ -989,11 +974,15 @@ function swapTurn() {
 // turnSwap --> swap the turn from user to cpu or cpu to user swapping currentTurn
 function playerSwap() {
   if (currentTurn === 'user') {
+    document.getElementById('game-board').style = 'display: none'
+    document.getElementById('cpu-board').style = 'display: grid'
     currentTurn = 'cpu'
-    setTimeout(() => cpuGuess(), 3000);
+    setTimeout(() => cpuGuess(), 2000);
   }
 
   else if (currentTurn === 'cpu') {
+    document.getElementById('cpu-board').style = 'display: none'
+    document.getElementById('game-board').style = 'display: grid'
     currentTurn = 'user'
   }
 }
@@ -1091,6 +1080,16 @@ function render(cb) {
 }
 
 /*----- GAME START -----*/
+createBoard()
+appendChildren(playerBoard, playerNodes)
+
+
+
+
+
+
+
+
 
 // Render Board
 // Cpu places ships
@@ -1110,9 +1109,7 @@ function render(cb) {
 
 
 
-createBoard()
-appendChildren(cpuBoard, cpuNodes)
-appendChildren(playerBoard, playerNodes)
+
 // cpuPlace(5)
 // cpuPlace(4)
 // cpuPlace(3)
